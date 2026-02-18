@@ -1,0 +1,48 @@
+{
+	"name": "smart-size",
+	"uuid": "691ea60397cf4665bc5cce5e7ff6cf98",
+	"displayName": "智能尺寸",
+	"description": "智能尺寸",
+	"version": "1.0.0",
+	"publisher": "李增浪",
+	"engines": {
+		"eda": "^3.0.0"
+	},
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "extension-store",
+		"url": ""
+	},
+	"categories": "PCB",
+	"keywords": ["智能尺寸"],
+	"images": {
+		"logo": "./images/logo.png"
+	},
+	"homepage": "https://www.wde.net.cn",
+	"bugs": "",
+	"activationEvents": {
+		"onStartupFinished": true
+	},
+	"entry": "./dist/index",
+	"dependentExtensions": {},
+	"headerMenus": {
+		"pcb": [
+			{
+				"id": "smart-size",
+				"title": "智能尺寸",
+				"menuItems": [
+					{
+						"id": "About",
+						"title": "关于...",
+						"registerFn": "about"
+					},
+					{
+						"id": "toolbox",
+						"title": "智能尺寸工具条",
+						"registerFn": "toolbox_switch"
+					}
+				]
+			}
+		]
+	}
+}

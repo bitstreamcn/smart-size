@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+    <title>智能尺寸工具箱</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 260px;
+            height: 40px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .tool-button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tool-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-button.active {
+            background: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+        }
+        
+        .tool-button.active:hover {
+            background: #45a049;
+        }
+        
+        .tool-button.disabled {
+            background: rgba(255, 255, 255, 0.4);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .tool-button.disabled:hover {
+            transform: none;
+            box-shadow: none;
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .icon {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(7498%) hue-rotate(356deg) brightness(91%) contrast(87%);
+            transition: all 0.3s ease;
+        }
+        
+        .tool-button.active .icon {
+            filter: brightness(0) invert(1);
+        }
+        
+        .tool-button.disabled .icon {
+            filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(90%);
+        }
+        
+        .tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .tool-button:hover .tooltip {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <button class="tool-button" id="add-smart-size" title="添加智能尺寸">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="tooltip">添加智能尺寸</span>
+        </button>
+        
+        <button class="tool-button" id="clear-smart-size" title="清空智能尺寸">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span class="tooltip">清空智能尺寸</span>
+        </button>
+        
+        <button class="tool-button" id="show-smart-size" title="显示智能尺寸">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span class="tooltip">显示智能尺寸</span>
+        </button>
+        
+        <button class="tool-button" id="hide-smart-size" title="隐藏智能尺寸">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke="currentColor" stroke-width="2"/>
+                <path d="M1 1l22 22" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span class="tooltip">隐藏智能尺寸</span>
+        </button>
+        
+        <button class="tool-button" id="apply-smart-size" title="应用智能尺寸">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="tooltip">应用智能尺寸</span>
+        </button>
+        
+        <button class="tool-button" id="rebuild-smart-size" title="重建智能尺寸">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23 4v6h-6M1 20v-6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="tooltip">重建智能尺寸</span>
+        </button>
+    </div>
+
+    <script>
+        const buttons = {
+            'add-smart-size': document.getElementById('add-smart-size'),
+            'clear-smart-size': document.getElementById('clear-smart-size'),
+            'show-smart-size': document.getElementById('show-smart-size'),
+            'hide-smart-size': document.getElementById('hide-smart-size'),
+            'apply-smart-size': document.getElementById('apply-smart-size'),
+            'rebuild-smart-size': document.getElementById('rebuild-smart-size')
+        };
+
+        let activeButton = null;
+        let isAddMode = false;
+
+        function setButtonActive(buttonId) {
+            if (activeButton) {
+                activeButton.classList.remove('active');
+            }
+            
+            if (buttonId && buttons[buttonId]) {
+                buttons[buttonId].classList.add('active');
+                activeButton = buttons[buttonId];
+            } else {
+                activeButton = null;
+            }
+        }
+
+        function setButtonDisabled(buttonId, disabled) {
+            if (buttons[buttonId]) {
+                if (disabled) {
+                    buttons[buttonId].classList.add('disabled');
+                    buttons[buttonId].disabled = true;
+                } else {
+                    buttons[buttonId].classList.remove('disabled');
+                    buttons[buttonId].disabled = false;
+                }
+            }
+        }
+
+        buttons['add-smart-size'].addEventListener('click', async function() {
+            let buttonId = 'add-smart-size';
+            await eda.smart_size.data_sync();
+            if (activeButton == buttons[buttonId])
+            {
+                isAddMode = false;
+                setButtonActive(null);
+                await eda.smart_size.add_end();
+            }
+            else
+            {
+                isAddMode = true;
+                setButtonActive('show-smart-size');
+                setButtonDisabled('show-smart-size', true);
+                setButtonDisabled('hide-smart-size', false);
+                await eda.smart_size.show_smart_size();
+
+                setButtonActive(buttonId);
+                await eda.smart_size.add_start();
+            }
+        });
+
+        buttons['show-smart-size'].addEventListener('click', async function() {
+            setButtonActive('show-smart-size');
+            console.log('显示智能尺寸功能被触发');
+            setButtonDisabled('show-smart-size', true);
+            setButtonDisabled('hide-smart-size', false);
+            await eda.smart_size.show_smart_size();
+            await eda.smart_size.data_sync();
+        });
+
+        buttons['hide-smart-size'].addEventListener('click', async function() {
+            setButtonActive('hide-smart-size');
+            console.log('隐藏智能尺寸功能被触发');
+            setButtonDisabled('hide-smart-size', true);
+            setButtonDisabled('show-smart-size', false);
+            await eda.smart_size.hide_smart_size();
+            await eda.smart_size.data_sync();
+        });
+
+        buttons['apply-smart-size'].addEventListener('click', async function() {
+            setButtonActive('apply-smart-size');
+            console.log('应用智能尺寸功能被触发');
+            await eda.smart_size.apply_size_data();
+            setTimeout(() => {
+                setButtonActive(null);
+            }, 1000);
+            await eda.smart_size.data_sync();
+        });
+
+        buttons['clear-smart-size'].addEventListener('click', async function() {
+            setButtonActive('clear-smart-size');
+            console.log('清空智能尺寸功能被触发');
+            await eda.sys_Dialog.showConfirmationMessage("确认清空智能尺寸吗？", "确认提示", "取消", "确认", async function(mainButtonClicked) {
+                if (!mainButtonClicked) {
+                    await eda.smart_size.clear_size_data();
+                }
+            });
+            setTimeout(() => {
+                setButtonActive(null);
+            }, 1000);
+            await eda.smart_size.data_sync();
+        });
+
+        buttons['rebuild-smart-size'].addEventListener('click', async function() {
+            setButtonActive('rebuild-smart-size');
+            console.log('重建智能尺寸功能被触发');
+            await eda.sys_Dialog.showConfirmationMessage("确定重建智能尺寸吗？确认后将根据元件当前位置重新计算智能尺寸", "确认提示", "取消", "确认", async function(mainButtonClicked) {
+                if (!mainButtonClicked) {
+                    await eda.smart_size.rebuild();
+                }
+            });
+            setTimeout(() => {
+                setButtonActive(null);
+            }, 1000);
+            await eda.smart_size.data_sync();
+        });
+
+        setButtonDisabled('hide-smart-size', true);
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            await eda.smart_size.data_sync();
+            await eda.smart_size.load_size_data();
+            eda.smart_size.on_add_end = async function(){
+                setButtonActive(null);
+                await eda.smart_size.data_sync();
+                isAddMode = false;
+            };
+            let is_visible = await eda.smart_size.is_visible();
+            setButtonDisabled('show-smart-size', is_visible);
+            setButtonDisabled('hide-smart-size', !is_visible);
+
+            setInterval(async function(){
+                if (!isAddMode){
+                    await eda.smart_size.clear_line();
+                }
+            }, 1000);
+        });
+        
+
+    </script>
+</body>
+</html>
