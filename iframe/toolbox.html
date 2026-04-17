@@ -203,6 +203,7 @@
         }
 
         buttons['add-smart-size'].addEventListener('click', async function() {
+            await eda.smart_size.data_sync();
             let buttonId = 'add-smart-size';
             await eda.smart_size.data_sync();
             if (activeButton == buttons[buttonId])
@@ -225,6 +226,7 @@
         });
 
         buttons['show-smart-size'].addEventListener('click', async function() {
+            await eda.smart_size.data_sync();
             setButtonActive('show-smart-size');
             console.log('显示智能尺寸功能被触发');
             setButtonDisabled('show-smart-size', true);
@@ -234,6 +236,7 @@
         });
 
         buttons['hide-smart-size'].addEventListener('click', async function() {
+            await eda.smart_size.data_sync();
             setButtonActive('hide-smart-size');
             console.log('隐藏智能尺寸功能被触发');
             setButtonDisabled('hide-smart-size', true);
@@ -243,6 +246,7 @@
         });
 
         buttons['apply-smart-size'].addEventListener('click', async function() {
+            await eda.smart_size.data_sync();
             setButtonActive('apply-smart-size');
             console.log('应用智能尺寸功能被触发');
             await eda.smart_size.apply_size_data();
@@ -253,6 +257,7 @@
         });
 
         buttons['clear-smart-size'].addEventListener('click', async function() {
+            await eda.smart_size.data_sync();
             setButtonActive('clear-smart-size');
             console.log('清空智能尺寸功能被触发');
             await eda.sys_Dialog.showConfirmationMessage("确认清空智能尺寸吗？", "确认提示", "取消", "确认", async function(mainButtonClicked) {
@@ -267,6 +272,7 @@
         });
 
         buttons['rebuild-smart-size'].addEventListener('click', async function() {
+            await eda.smart_size.data_sync();
             setButtonActive('rebuild-smart-size');
             console.log('重建智能尺寸功能被触发');
             await eda.sys_Dialog.showConfirmationMessage("确定重建智能尺寸吗？确认后将根据元件当前位置重新计算智能尺寸", "确认提示", "取消", "确认", async function(mainButtonClicked) {
@@ -298,7 +304,7 @@
                 if (!isAddMode){
                     await eda.smart_size.clear_line();
                 }
-            }, 1000);
+            }, 5000);
         });
         
 

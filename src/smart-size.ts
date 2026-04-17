@@ -12,7 +12,7 @@ async function get_cursor_pos()
             (
                 prim.getState_PrimitiveType() === EPCB_PrimitiveType.COMPONENT || //器件
                 prim.getState_PrimitiveType() === EPCB_PrimitiveType.IMAGE || //图片
-                prim.getState_PrimitiveType() === EPCB_PrimitiveType.PAD || //焊盘
+                //prim.getState_PrimitiveType() === EPCB_PrimitiveType.PAD || //焊盘
                 prim.getState_PrimitiveType() === EPCB_PrimitiveType.VIA || //过孔
                 //prim.getState_PrimitiveType() === EPCB_PrimitiveType.STRING || //文本
             (prim.getState_PrimitiveType() === EPCB_PrimitiveType.REGION && (prim as any).layer == EPCB_LayerId.BOARD_OUTLINE) //板框
@@ -824,16 +824,32 @@ let smart_size = {
                                 x : x + calc_result.offset_x,
                                 y : y + calc_result.offset_y
                             });
-                        }else if (item.end_pos.primitiveType == EPCB_PrimitiveType.PAD){
+                        }/*else if (item.end_pos.primitiveType == EPCB_PrimitiveType.PAD){
                             await eda.pcb_PrimitivePad.modify(dstPrimitive.getState_PrimitiveId(),{
-                                x : x + calc_result.offset_x,
-                                y : y + calc_result.offset_y
-                            });
-                        }else if (item.end_pos.primitiveType == EPCB_PrimitiveType.VIA){
-                            await eda.pcb_PrimitiveVia.modify(dstPrimitive.getState_PrimitiveId(),{
+                                layer : (dstPrimitive as IPCB_PrimitivePad).getState_Layer(),
+                                padNumber : (dstPrimitive as IPCB_PrimitivePad).getState_PadNumber(),
                                 x : x + calc_result.offset_x,
                                 y : y + calc_result.offset_y,
-                                holeDiameter : (dstPrimitive as IPCB_PrimitiveVia).getState_HoleDiameter()
+                                rotation : (dstPrimitive as IPCB_PrimitivePad).getState_Rotation(),
+                                pad : (dstPrimitive as IPCB_PrimitivePad).getState_Pad(),
+                                net : (dstPrimitive as IPCB_PrimitivePad).getState_Net(),
+                                hole : (dstPrimitive as IPCB_PrimitivePad).getState_Hole(),
+                                holeOffsetX : (dstPrimitive as IPCB_PrimitivePad).getState_HoleOffsetX(),
+                                holeOffsetY : (dstPrimitive as IPCB_PrimitivePad).getState_HoleOffsetY(),
+                                holeRotation : (dstPrimitive as IPCB_PrimitivePad).getState_HoleRotation(),
+                                metallization : (dstPrimitive as IPCB_PrimitivePad).getState_Metallization(),
+                             });
+                        }
+                        */else if (item.end_pos.primitiveType == EPCB_PrimitiveType.VIA){
+                            await eda.pcb_PrimitiveVia.modify(dstPrimitive.getState_PrimitiveId(),{
+                                net : (dstPrimitive as IPCB_PrimitiveVia).getState_Net(),
+                                x : x + calc_result.offset_x,
+                                y : y + calc_result.offset_y,
+                                holeDiameter : (dstPrimitive as IPCB_PrimitiveVia).getState_HoleDiameter(),
+                                diameter : (dstPrimitive as IPCB_PrimitiveVia).getState_Diameter(),
+                                viaType : (dstPrimitive as IPCB_PrimitiveVia).getState_ViaType(),
+                                designRuleBlindViaName : (dstPrimitive as IPCB_PrimitiveVia).getState_DesignRuleBlindViaName(),
+                                solderMaskExpansion : (dstPrimitive as IPCB_PrimitiveVia).getState_SolderMaskExpansion(),
                             });
                         }
                     }

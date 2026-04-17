@@ -2,8 +2,8 @@
 	"name": "smart-size",
 	"uuid": "691ea60397cf4665bc5cce5e7ff6cf98",
 	"displayName": "智能尺寸",
-	"description": "智能尺寸",
-	"version": "1.0.0",
+	"description": "”你说你想要一个确定的答案，我现在终于可以给你了“。给板框和定位孔一个确定的距离尺寸，根据给定的尺寸自动调整元件的位置，确保元件之间的距离符合要求",
+	"version": "1.0.2",
 	"publisher": "李增浪",
 	"engines": {
 		"eda": "^3.0.0"
@@ -11,7 +11,7 @@
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "extension-store",
-		"url": ""
+		"url": "https://github.com/bitstreamcn/smart-size"
 	},
 	"categories": "PCB",
 	"keywords": ["智能尺寸"],
@@ -19,7 +19,7 @@
 		"logo": "./images/logo.png"
 	},
 	"homepage": "https://www.wde.net.cn",
-	"bugs": "",
+	"bugs": "https://github.com/bitstreamcn/smart-size",
 	"activationEvents": {
 		"onStartupFinished": true
 	},
